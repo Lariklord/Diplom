@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Diplom.styles.css" asp-append-version="true" />
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</head>
+
+<body>
+    <div class="flex-container column">
+
+        <div class="header">
+
+            <div class="flex-item">
+
+                <div>
+                    <a asp-controller="Home" asp-action="Catalog" asp-area="Store"><img src="~/img/logo.png" width="200" height="40" style="margin-top:13px;" /></a>
+                </div>
+                <div class="item1">
+                    <img src="~/img/alarm.svg" class="alarm-logo logo" />
+                    <p class="header-text">Сборка 10 мин</p>
+                    <img src="~/img/card.svg" class="card-logo logo" />
+                    <p class="header-text">Минимальная корзина 24р.</p>
+                    <partial name="~/Areas/Store/Views/Shared/_LoginPartial.cshtml" />
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="header-info">
+            <div class="flex-item text">
+                <form class="search-form" asp-action="Index" asp-controller="Product" asp-area="Store">
+                    <img id="search_icon" src="~/img/search_black.png" alt="search icon" class="button">
+                    <input type="text" maxlength="50" placeholder="Поиск..." class="searchbar" onmouseover="RedIcon()" onmouseout="BlackIcon()" name="productName" />
+                </form>
+
+                <a class="info-item-long header-link" asp-controller="Shopcart" asp-action="Order" asp-area="Store">
+                    <img src="~/img/basket.png" class="icon-long" />
+                    <p class="icon-text">Корзина</p>
+                </a>
+                <a class="info-item-long header-link" asp-controller="Profile" asp-action="Main" asp-area="Store">
+                    <img src="~/img/profile.png" class="icon-long" />
+                    <p class="icon-text">Профиль</p>
+                </a>
+                <a class="info-item-short header-link" asp-action="GetFavProducts" asp-controller="Product" asp-area="Store">
+                    <img src="~/img/heart.png" class="icon-short" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    @RenderBody()
+
+    <footer style="margin-top:50px;">
+        <div class="container">
+            <div class="column">
+                <div>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d150458.7386538187!2d27.4250927!3d53.8976651!3m2!1i1024!2i768!4f13.1!2m1!1z0LPRgNC-0YjQuNC6!5e0!3m2!1sru!2sby!4v1682440626684!5m2!1sru!2sby"  height="300" style="border:0;width:100%;"></iframe>
+                </div>
+                <div class="footer-row">
+                    <div>
+                        <ul>
+                            <li><a class="footer-link" asp-action="Catalog" asp-controller="Home" asp-area="Store">Каталог</a></li>
+                            <li><a class="footer-link" asp-action="Main" asp-controller="Profile" asp-area="Store">Профиль</a></li>
+                            <li><a class="footer-link" asp-action="Order" asp-controller="Shopcart" asp-area="Store">Корзина</a></li>
+                            <li><a class="footer-link" asp-action="Main" asp-controller="Profile" asp-area="Store">Помощь</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><a class="footer-link" style="color:white" href="tel:+375296307745">+375296307745</a></li>
+                            <li><a class="footer-link" style="color:white" href="mailto:groshikstore@mail.ru;">groshikstore@mail.ru</a></li>
+                            <li><a class="footer-link" style="color:white" href="https://t.me/groshyk_official" target="_blank"><img class="social-img" src="~/img/tg.svg" /></a></li>
+                            <li><a class="footer-link" style="color:white" href="viber://chat?number=+375296307745" target="_blank"><img class="social-img" src="~/img/vb.svg" /></a></li>
+                        </ul>                                           
+                    </div>          
+                </div>
+                <div>
+                    <p class="footer-row-p">
+                        © 2023 ООО «Евроторг» УНП 101168731. Все права защищены.
+                    </p>
+                    <a class="footer-row-p" target="_blank" style="color:white;text-decoration: none;" href="https://eplus.by/UserFiles/policy_2022_09_15.pdf">
+                        Политика ООО «ЕВРОТОРГ» в отношении обработки персональных данных.
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

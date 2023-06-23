@@ -1,0 +1,32 @@
+﻿@model CatalogVM;
+@{
+    ViewData["Title"] = "Каталог";
+}
+<div class="main">
+    <div class="menu">
+        <div class="left-menu">
+            <h1>Каталог</h1>
+                <ul class="nav-category">
+                    @foreach(var category in Model.Categories!)
+                    {
+                    <li>
+                        <a asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.Id"><span>|</span><img src="@category.SideUrl" />@category.Name</a>
+                    </li>
+                    }                  
+                </ul>
+        </div>
+        <div class="container">
+            <div class="row">
+                @foreach (var category in Model.Categories)
+                {
+                    <div class="col-lg-3 category-item" style="background-image:url('@category.MainUrl')">
+                        <a class="category-link" asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.Id">
+                                <h1>@category.Name</h1>  
+                            </a>
+                        </div>                
+                }         
+            </div>
+        </div>
+    </div>
+</div>
+

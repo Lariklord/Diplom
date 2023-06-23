@@ -1,0 +1,198 @@
+﻿@model UsersPanelVm;
+@{
+	ViewData["Title"] = "Пользователи";
+}
+<style>
+	* {
+		Font-family: Roboto,sans-serif;
+	}
+
+	.header1 {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background-color: #333;
+		color: white;
+		padding: 10px 20px;
+	}
+
+		.header1 a {
+			color: white;
+			text-decoration: none;
+			margin-left: 20px;
+		}
+
+	.filter-block {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	table {
+		border-collapse: collapse;
+		margin: 0 auto;
+		width: 100%;
+	}
+
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+
+	tr:hover {
+		background-color: #ddd;
+	}
+
+	th {
+		background-color: #333;
+		color: white;
+		padding: 10px;
+		text-align: center;
+	}
+
+	td {
+		border: 1px solid #ddd;
+		padding: 10px;
+		text-align: center;
+	}
+
+		td a {
+			color: #F40F31;
+			text-decoration: none;
+			position: relative;
+		}
+
+			td a:hover {
+				color: black;
+			}
+
+			td a::after {
+				content: '';
+				display: block;
+				position: absolute;
+				bottom: -2px;
+				left: 0;
+				width: 0;
+				height: 2px;
+				background-color: black;
+				transition: width 0.3s ease-in-out;
+			}
+
+			td a:hover::after {
+				width: 100%;
+			}
+
+	.form {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin: 20px;
+	}
+
+	input {
+		padding: 10px;
+		margin: 5px;
+		border: none;
+		border-radius: 5px;
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	}
+
+	select {
+		padding: 10px;
+		margin: 5px;
+		border: none;
+		border-radius: 5px;
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	}
+
+	button {
+		padding: 10px;
+		margin: 5px;
+		background-color: #1abc9c;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+
+		button:hover {
+			background-color: #148f77;
+		}
+</style>
+<header class="header1">
+	<h1>Управление пользователями</h1>
+	<nav>
+		<a asp-action="Index" asp-controller="AdminPanel">Главная</a>
+		<a asp-action="Products" asp-controller="AdminPanel">Продукты</a>
+		<a asp-action="Orders" asp-controller="AdminPanel">Заказы</a>
+		<a asp-action="Users" asp-controller="AdminPanel">Пользователи</a>
+	</nav>
+</header>
+<div class="filter-block">
+	<form class="form" method="post" asp-controller="AdminPanel" asp-action="GetUsersBy">
+		<select name="findOption">
+			<option value="mail">Почта</option>
+			<option value="phone">Номер телефона</option>
+		</select>
+		<input type="text" name="findValue" placeholder="Введите значение">
+		<button>Искать</button>		
+	</form>
+	<form class="form" method="post" asp-action="SortUsersBy" asp-controller="AdminPanel">
+		<select name="sortOption">
+			<option value="surname">По фамилии</option>
+			<option value="mail">По почте</option>
+		</select>
+		<select name="sortOrder">
+			<option value="asc">По возрастанию</option>
+			<option value="desc">По убыванию</option>
+		</select>
+		<button>Сортировать</button>
+	</form>
+	<form class="form">
+		<button asp-controller="AdminPanel" asp-action="Users">Сбросить</button>
+	</form>
+</div>
+@if (Model.Users.Count > 0)
+{
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Почта</th>
+				<th>Телефон</th>
+				<th>Фамилия</th>
+				<th>Имя</th>
+				<th>Баллы</th>
+				<th>Дата рождения</th>
+				<th>Действия</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model.Users!)
+			{
+				<tr>
+					<td>@item.Id</td>
+					<td>@item.Email</td>
+					<td>@item.PhoneNumber</td>
+					<td>@item.UserSurname</td>
+					<td>@item.FName</td>
+					<td>@item.Points</td>
+					<td>@item.Birthday</td>
+					<td>
+						<a asp-route-userId="@item.Id" asp-action="Orders" asp-controller="AdminPanel">Просмотреть заказы</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<div class="message">
+		<p class="big-p">Пользователи отсутсвуют</p>
+	</div>
+}

@@ -1,0 +1,162 @@
+﻿@model ProductFormVM;
+@{
+    ViewData["Title"] = "Управление товарами";
+}
+<style>
+    * {
+        Font-family: Roboto,sans-serif;
+    }
+
+    .header1 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+    }
+
+        .header1 a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+    input,textarea {
+        padding: 10px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        width:100%;
+    }
+
+    select {
+        padding: 10px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    button {
+        padding: 10px;
+        margin: 5px;
+        background-color: #1abc9c;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #148f77;
+        }
+
+    .main_tab {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .tab_item {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        margin:20px;
+    }
+    img{
+        width:500px;
+        height:500px;
+        margin: 0 auto;
+    }
+
+    label {
+        margin: 5px;
+        display: block;
+    }
+
+</style>
+<header class="header1">
+    <h1>Управление товарами</h1>
+    <nav>
+        <a asp-action="Index" asp-controller="AdminPanel">Главная</a>
+        <a asp-action="Products" asp-controller="AdminPanel">Продукты</a>
+        <a asp-action="Orders" asp-controller="AdminPanel">Заказы</a>
+        <a asp-action="Users" asp-controller="AdminPanel">Пользователи</a>
+    </nav>
+</header>
+<div class="main_tab">
+
+    <div class="tab_item">
+        <img id="prodcut_img" src="@Model?.MainUrl" />
+        <label asp-for="MainUrl"></label>
+        <input asp-for="MainUrl" id="image_url" form="product_form" />
+        <span asp-validation-for="MainUrl" class="text-danger"></span>
+
+    </div>
+    <div class="tab_item">
+        <form method="post" asp-action="ProductForm" id="product_form" asp-controller="AdminPanel">
+            <div>
+                <input asp-for="Id" style="display:none;" />
+            </div>
+            <div>
+                <label asp-for="CategoryId"></label>
+                <select asp-for="CategoryId">
+                    @foreach (var category in Model.Categories!)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Name"></label>
+                <input asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Composition"></label>
+                <textarea asp-for="Composition"></textarea>
+                <span asp-validation-for="Composition" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Code"></label>
+                <input asp-for="Code" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="ShelfLife"></label>
+                <textarea asp-for="ShelfLife"></textarea>
+                <span asp-validation-for="ShelfLife" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Price"></label>
+                <input asp-for="Price" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Weight"></label>
+                <input asp-for="Weight" />
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+            <button>Сохранить</button>
+        </form>
+
+    </div>
+</div>
+<script>  
+    document.getElementById("image_url").addEventListener("input", setSrc);
+    function setSrc() {
+        var input_src = document.getElementById("image_url");
+        var image = document.getElementById("prodcut_img");
+        image.src = input_src.value;
+    }
+</script>
+

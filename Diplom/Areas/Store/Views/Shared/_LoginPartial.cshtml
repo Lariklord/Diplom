@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+       
+}
+else
+{
+    <a class="register-link" asp-area="Identity" asp-page="/Account/Login">Войти</a>
+    <a class="register-link" asp-area="Identity" asp-page="/Account/Register">Зарегестрироваться</a>
+    
+}

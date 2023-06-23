@@ -1,0 +1,254 @@
+﻿@model ProfileVM
+@{
+    ViewData["Title"] = "Профиль";
+}
+<div class="profile">
+    <div class="profile-main">
+        <div class="profile-info">
+            <h1 class="profile-h1">Профиль</h1>
+            <a class="profile-a" onmouseover="RedLogout()" onmouseout="GrayLogout()" asp-action="LogOut" asp-controller="Home">
+            Выйти из аккаунта
+            <img class="logout-img" id="logout-img" src="~/img/gray_logout.svg" />
+            </a>
+        </div>
+        <div class="profile-info">
+            <div class="user-info">
+                <div class="user-info-item">
+                    <h1 class="profile-h1">@($"{@Model?.User?.FName} {@Model?.User?.UserSurname}")</h1>
+                </div>
+                <div class="user-info-item">
+                    <img class="icon" src="~/img/phone.svg" />
+                    <p>@Model?.User?.PhoneNumber</p>
+                </div>
+                 <div class="user-info-item">
+                     <img class="icon" src="~/img/email.svg" />
+                    <p>@User?.Identity?.Name</p>
+                </div>
+            </div>
+            <div class="point-info">
+                <div class="point-image">
+                    <p>Товары с кэшбеком<br />1 балл = 1 копейка</p>
+                    <img src="~/img/coin.png" />
+                </div>
+                <div class="point-description">
+                    <div class="point-description-item">
+                        <img src="~/img/star.png" />
+                        <h1>У вас @Model?.User?.Points = @((float)Model!.User!.Points/100)р.</h1>
+                    </div>
+                    <div class="point-description-item">
+                        <p>Получайте баллы за покупку даже акционных товаров и оплачивайте до 99,99% от стоимости заказа</p>
+                    </div>
+                    <div class="point-description-item">
+                        <button onclick="ShowHelp()">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+        </div>       
+    </div>
+</div>
+<div class="profile-tab">
+    <div class="profile-tab-content">
+        <div class="profile-nav">
+            <div class="profile-nav-item" onclick="ShowUserForm()" id="user-form-link">
+                <a >Личные данные</a>
+                <div class="red-line" id="redlineUserForm"></div>
+            </div>
+            <div class="profile-nav-item" onclick="ShowOrders()" id="orders-link">
+                <a>Заказы</a>
+                <div class="red-line" id="redlineOrders"></div>
+            </div>
+            <div class="profile-nav-item" onclick="ShowPayment()" id="payment-link">
+                <a >Способ оплаты</a>
+                <div class="red-line" id="redlinePayment"></div>
+            </div>
+            <div class="profile-nav-item" onclick="ShowNotifications()" id="notifications-link">
+                <a>История уведомлений</a>
+                <div class="red-line" id="redlineNotifications"></div>
+            </div>
+            <div class="profile-nav-item" onclick="ShowHelp()" id="help-link">
+                <a>Помощь</a>
+                <div class="red-line" id="redlineHelp"></div>
+            </div>          
+        </div>
+        <div class="profile-tab-content-item">
+            <div class="user-form"  id="user-form">
+                 <h1>Личные данные</h1>
+                <form method="post">
+                    <div class="user-form-item">
+                        <div class="user-form-label">
+                            <label asp-for=Name></label>
+                        </div>
+                        <div class="user-form-input">
+                            <input asp-for=Name type="text" placeholder="Имя" maxlength="15"/>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                       
+                    </div>
+                   
+                    <div class="user-form-item">
+                        <div class="user-form-label">
+                            <label asp-for=Surname></label>
+                        </div>
+                        
+                        <div class="user-form-input">
+                            <input asp-for=Surname type="text" placeholder="Фамилия" maxlength="15"/>
+                            <span asp-validation-for="Surname" class="text-danger"></span>
+                        </div>
+                        
+                    </div>                 
+                    <div class="user-form-item">
+                        <div class="user-form-label">
+                            <label asp-for=Phone>Телефон</label>
+                        </div>
+
+                        <div class="user-form-input">
+                            <input asp-for=Phone type="tel" placeholder="Телефон" maxlength="13" />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    
+                    <div class="user-form-item">
+                        <div class="user-form-label">
+                            <label asp-for=Birthday></label>
+                        </div>
+                        
+                        <div class="user-form-input">
+                            <input asp-for=Birthday type="date" />
+                        </div>
+        
+                    </div>
+                   
+                    <div class="user-form-item">
+                        <button class="save-btn">Сохранить</button>
+                    </div>
+                    
+                </form>
+            </div>
+            <div class="payment-method" id="payment">
+                <h1>Способ оплаты</h1>
+                <form method="post" asp-action="Card">
+                    @if(Model?.User?.PaymentMethod=="card")
+                    {
+                        <div class="payment-method-item">
+                            <input type="radio" name="payment" value="card" checked  />
+                            <img src="~/img/terminal.webp" />
+                            <label>Картой через терминал</label>
+                        </div>
+                        <div class="payment-method-item">
+                            <input type="radio" name="payment" value="nal" />
+                            <img src="~/img/nal.webp" />
+                            <label>Наличными</label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="payment-method-item">
+                            <input type="radio" name="payment" value="card"  />
+                            <img src="~/img/terminal.webp" />
+                            <label>Картой через терминал</label>
+                        </div>
+                        <div class="payment-method-item">
+                            <input type="radio" name="payment" value="nal" checked />
+                            <img src="~/img/nal.webp" />
+                            <label>Наличными</label>
+                        </div>
+                    }
+                    <button>Сохранить</button>
+                </form>
+            </div>
+            <div class="orders" id="orders">
+                @if(Model?.Orders?.Count==0)
+                {
+                    <div class="message">
+                        <p class="big-p">Вы ещё ничего не заказывали :(</p>
+                    </div>
+                }
+                 else
+                    {
+                        foreach (var order in Model?.Orders!)
+                        {
+                            <a class="order-link" asp-controller="Profile" asp-action="OrderDetail" asp-route-orderId="@order.Id">
+                                <div class="order-item @if (order.Status == "Подтвержден") { <text>confirm-status</text> } else if (order.Status == "Ожидает подтверждения") { <text>wait-status</text> } else {<text>cancel-status</text>}">
+                                    <h4>Заказ №@order.Id<br />Статус: @order.Status</h4>
+                                    <p>Дата заказа: @order.OrderDate.ToString("f")<br />Сумма заказа: @(order.Price)р.</p>
+                                </div>
+                            </a>
+                           
+                        }
+                    }
+                 
+            </div>
+            <div class="notifications" id="notifications">          
+                    @if(Model?.Notifications?.Count==0)
+                    {
+                        <div class="message">
+                            <img src="~/img/notification.svg" />
+                            <p class="big-p">У вас пока нет уведомлений</p>
+                         </div>
+                    }
+                    else
+                    {
+                        foreach (var notify in Model?.Notifications!)
+                        {
+                            <div class="notification">
+                                <p>@notify.Date.ToString("f")</p>
+                                <p>@notify.Text</p>
+                            </div>
+                        }
+                    }
+            </div>
+            <div class="help" id="help">
+                <h1>Ответы на частые вопросы</h1>
+                <div class="help-item">
+                    <h2>Какая стоимость доставки?</h2>
+                    <p>Стоимость доставки - 9.00 руб.</p>
+                </div>
+                <div class="help-item">
+                    <h2>Какое время доставки?</h2>
+                    <p>Ваш дом в зоне доставки? Поздравляем! Мы доставим заказ за 30-50 минут.</p>
+                </div>
+                <div class="help-item">
+                    <h2>Куда вы доставляете?</h2>
+                    <p>Город Минск в пределах Мкада</p>
+                </div>
+                <div class="help-item">
+                    <h2>Как воспользоваться промокодом?</h2>
+                    <p>Введите промокод в специальное поле в Корзина → Промокод → Нажмите "Применить".</p>
+                    <p>К одному заказу можно применить только один промокод.</p>
+                </div>
+                <div class="help-item">
+                    <h2>Какое время работы?</h2>
+                    <p>Работаем каждый день!</p>
+                    <p>Доставка заказов с 07.00 до 23.00.</p>
+                </div>
+                <div class="help-item">
+                    <h2>Обращения покупателей</h2>
+                    <p>Номер лица, уполномоченного рассматривать обращения покупателей о нарушении их прав, предусмотренных законодательством о защите прав потребителей: +375 29 630 77 45</p>
+                </div>
+                <div class="help-item">
+                    <h2>Реквизиты продавца</h2>
+                    <p>
+                        Закрытое акционерное общество «Интернет-магазин Евроопт»
+                        Свидетельство о государственной регистрации №691536217. УНП 691536217, место нахождения: 220019 Минская область, Минский район, Щомыслицкий с/с, Западный промузел ТЭЦ-4, кабинет 229. Почтовый адрес: 220019, г. Минск, а/я 19                    
+                    </p>
+                    <p>
+                         Зарегистрировано решением Минского районного исполнительного комитета от 09.06.2014 г. в Едином государственном регистре юридических лиц и индивидуальных предпринимателей.
+                        Книга замечаний и предложений находится по адресу: г. Минск, ул. Брикета, 30, отдел кадров, 304 кабинет, 3 этаж.
+                    </p>
+                </div>
+                <div class="help-item">
+                    <h2>Бонусные баллы</h2>
+                    <p>
+                        На данный момент можно только использовать накопившиеся баллы.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    ShowUserForm();
+</script>
+
+           

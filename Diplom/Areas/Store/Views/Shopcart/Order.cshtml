@@ -1,0 +1,226 @@
+﻿@model Diplom.Areas.Store.Models.ViewModels.ShopCartVM
+@{
+    ViewData["Title"] = "Корзина";
+}
+<div class="shopcart-container">
+    <div class="shopcart-main">
+
+        <div class="order-info">
+            <a class="back" onclick="history.back()" onmouseover="RedBack()" onmouseout="GrayBack()">
+            Вернуться назад
+            <img class="back-img" id="back-img" src="~/img/gray_back.svg" />
+            </a>
+            <form id="main" asp-action="CreateOrder" asp-controller="Shopcart">
+                <fieldset class="form-group" >
+                    <legend class="fieldset-header">Контактные данные</legend>                 
+                    <fieldset class="form-item">
+                        <input asp-for=Phone class="text-input" placeholder="-"  />
+                        <label asp-for=Phone class="text-input-label"></label>
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                        <img class="check" src="~/img/check.svg" />
+                    </fieldset>
+                    <p class="addition-info">*Мы отправим вам чек заказа на почту</p>
+                </fieldset>
+                <fieldset class="form-group">
+                    <legend class="fieldset-header">Адрес доставки</legend>
+                    <fieldset class="form-item">
+                        <input asp-for="Street" type="text" class="text-input" placeholder="-" maxlength="30" />
+                        <label asp-for=Street class="text-input-label"></label>
+                        <span asp-validation-for="Street" class="text-danger"></span>
+                        <img class="check" src="~/img/check.svg" />
+                    </fieldset>
+                    <fieldset class="form-item">
+                        <fieldset class="form-item-short">
+                            <input asp-for=House type="text" class="text-input" placeholder="-" maxlength="5"/>
+                            <label asp-for=House class="text-input-label"></label>
+                            <span asp-validation-for="House" class="text-danger"></span>
+                            <img class="check" src="~/img/check.svg" />
+                        </fieldset>
+                        <fieldset class="form-item-short">
+                            <input asp-for=Entrance type="text" class="text-input" placeholder="-" maxlength="5"/>
+                            <label asp-for=Entrance class="text-input-label"></label>
+                            <span asp-validation-for="Entrance" class="text-danger"></span>
+                            <img class="check" src="~/img/check.svg" />
+                        </fieldset>
+                        <fieldset class="form-item-short">
+                            <input asp-for=Flour type="text" class="text-input" placeholder="-" maxlength="5"/>
+                            <label asp-for="Flour" class="text-input-label"></label>
+                            <span asp-validation-for="Flour" class="text-danger"></span>
+                            <img class="check" src="~/img/check.svg" />
+                        </fieldset>
+                        <fieldset class="form-item-short">
+                            <input asp-for=Flat type="text" class="text-input" placeholder="-" maxlength="5" />
+                            <label asp-for=Flat class="text-input-label"></label>
+                            <span asp-validation-for="Flat" class="text-danger"></span>
+                            <img class="check" src="~/img/check.svg" />
+                        </fieldset>
+                    </fieldset>            
+                    <fieldset class="form-item">
+                        <textarea asp-for=Comment class="comment-text" placeholder="-" rows="3" maxlength="100"></textarea>
+                        <label asp-for=Comment class="text-input-label">Введите комментарий</label>
+                    </fieldset>
+                </fieldset>
+                <fieldset class="form-group">
+                    <legend class="fieldset-header">Время доставки</legend>
+                    <fieldset class="form-item-radio">
+                        <input asp-for=Type type="radio" name="type" class="type-slot" value="fast" checked/>
+                        <label>Поскорее</label>
+                    </fieldset>
+                    <fieldset class="form-item-radio" id="show-dates">
+                        <input asp-for=Type type="radio" name="type" class="type-slot" value="choose" />
+                        <label>Выбрать время</label>
+                    </fieldset>
+                </fieldset>
+                <fieldset class="form-group" id="dates">
+                    @{
+                        var date = DateTime.Now;
+                        date = date.AddHours(1);
+                        while (date.Minute % 10 != 0)
+                            date = date.AddMinutes(1);
+                        date = date.AddMinutes(10);
+                        for (int i = 0; i < 300; i++)
+                        {
+                            if (date.Hour < 7)
+                            {
+                                i--;
+                            }
+                            else
+                            {
+                                <fieldset class="form-item-date">
+                                    <input value="@date" type="radio" class="date" name="itemDate" />
+                                    <label>@date.ToString("dd MMM HH:mm")-@date.AddMinutes(10).ToString("HH:mm")</label>
+                                </fieldset>
+                            }
+                            date = date.AddMinutes(10);
+                        }
+                    }
+                </fieldset>                  
+                <fieldset class="form-group">
+                    <legend class="fieldset-header">Способ оплаты</legend>
+                    <fieldset class="form-item">
+                        @if (Model?.User?.PaymentMethod == "card")
+                        {
+                            <div class="form-payment">
+                                <input asp-for="Payment" type="radio" name="payment" value="card" checked/>
+                                <img src="~/img/terminal.webp" />
+                                <label>Картой через терминал</label>
+                            </div>
+                            <div class="form-payment">
+                                <input asp-for="Payment" type="radio" name="payment" value="nal" />
+                                <img src="~/img/nal.webp" />
+                                <label>Наличными</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-payment">
+                                <input asp-for="Payment" type="radio" name="payment" value="card" />
+                                <img src="~/img/terminal.webp" />
+                                <label>Картой через терминал</label>
+                            </div>
+                            <div class="form-payment">
+                                <input asp-for="Payment" type="radio" name="payment" value="nal" checked />
+                                <img src="~/img/nal.webp" />
+                                <label>Наличными</label>
+                            </div>
+                        }
+                    </fieldset>
+                                      
+                </fieldset>
+                <fieldset class="form-group">
+                    <legend class="fieldset-header">Бонусные баллы</legend>
+                    <fieldset class="form-item">
+                        <input id="Points" min="0" max="@( Model?.User?.Points == null ? 100000 : Model.User.Points)" asp-for="Points" type="number" class="text-input" placeholder="-" maxlength="20" />
+                        <label asp-for="Points" class="text-input-label"></label>
+                        <span class="text-danger" id="points-error"></span>
+                    </fieldset>
+                    <p class="addition-info">У вас @Model?.User?.Points = @((decimal)Model?.User?.Points! / 100)р.</p>
+                </fieldset>               
+            </form>
+        </div>
+        <div class="shopcart-info">
+            <h2 class="basket">Корзина</h2>
+            <div class="basket-item">
+                <div class="basket-item-image">
+                    <img src="~/img/delivery.webp" />
+                </div>
+                <div class="basket-item-info">
+                    <p>Услуга "Обработка экспресс-доставки"</p>
+                    <p class="price">9,00р.</p>
+                </div>
+            </div>
+            @{
+                foreach (var item in Model!.Products!)
+                {
+                    <div class="basket-item">
+                        <div class="basket-item-image">
+                            <img src="@item.Key!.MainUrl" />
+                        </div>
+                        <div class="basket-item-info">
+                            <p>@item.Key!.Name</p>
+                            <p class="price">@(item.Key?.Weight == 0 ? @Math.Round(item.Key.Price, 2) * item.Value : Math.Round((decimal)item.Key!.Weight * item.Key.Price, 2) * item.Value)р.</p>
+                            <div>
+                                <a class="product-button" asp-action="DeleteProduct" asp-controller="ShopCart" asp-route-productId="@item.Key.Id" asp-route-count="1">-</a>
+                                <h1 class="product-count" >@item.Value</h1>
+                                <a class="product-button" asp-action="AddProduct" asp-controller="ShopCart" asp-route-productId="@item.Key.Id" asp-route-count="1">+</a>
+                            </div>
+                        </div>
+                        <div class="basket-item-del">
+                            <a class="btn-delete" asp-action="DeleteProduct" asp-controller="ShopCart" asp-route-productId="@item.Key.Id">x</a>
+                        </div>
+                    </div>
+                }
+            }
+            <div class="price-description">
+                <div class="row-text">
+                    <p>Скидка за бонусные баллы:</p>
+                    <p id="sale">0,00р.</p>
+                </div>
+                <div class="row-text">
+                    <p>Начисленно баллов:</p>
+                    <p>@((int)(Model.Price!*3))<img src="~/img/star.png"/></p>
+                </div>
+                <div class="row-text">
+                    <h2>Итого:</h2>
+                    <h2 id="h2cost">@((Model.Price + 9).ToString())р.</h2>
+                </div>           
+            </div>
+            <div class="basket-button">
+                @if(Model.Price<15)
+                {
+                    <button class="buy" form="main" disabled>Минимальная сумма заказа - 24р.</button>
+                }
+                else
+                {
+                    <button class="buy" form="main" id="btncost">Заказать за @((Model.Price+9).ToString())р. </button>
+                    <input style="display:none;" id="cost" type="text" value="@Model.Price" />
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("Points").addEventListener("input", validatePoints);
+    function validatePoints() {
+        var min = parseFloat(document.getElementById("Points").getAttribute("min"));
+        var max = parseFloat(document.getElementById("Points").getAttribute("max"));
+        var points = document.getElementById("Points").value;
+        if (points !== "" && (points < min || points > max)) {
+            document.getElementById("points-error").innerHTML = "У вас всего " + max + " баллов!";
+            document.getElementById("sale").innerHTML = "0,00р.";
+            var a = parseFloat(document.getElementById("cost").value.replace(",", ".")).toFixed(2);
+            document.getElementById("h2cost").innerHTML = (parseFloat(a) + 9).toFixed(2) + "р.";
+            document.getElementById("btncost").innerHTML = "Заказать за " + (parseFloat(a) + 9).toFixed(2) + "р.";
+            return false;
+        } else {
+            document.getElementById("points-error").innerHTML = "";
+            points /= 100;
+            document.getElementById("sale").innerHTML = points.toFixed(2) + "р.";
+            var a = parseFloat(document.getElementById("cost").value.replace(",", "."));
+            document.getElementById("h2cost").innerHTML = (parseFloat(a) + 9 - parseFloat(points)).toFixed(2) + "р.";
+            document.getElementById("btncost").innerHTML = "Заказать за " + (parseFloat(a) + 9 - parseFloat(points)).toFixed(2) + "р.";
+            return true;
+        }
+    } 
+</script>

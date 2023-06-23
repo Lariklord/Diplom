@@ -1,0 +1,233 @@
+﻿@model Diplom.Areas.Store.Models.ViewModels.OrderDetailVM
+@{
+    ViewData["Title"] = "Заказ №"+Model?.Order?.Id;
+}
+<div class="order-container">
+    <div class="order-main">
+        <div class="order-header">
+            <div>
+                <h1>Заказ №@Model!.Order!.Id</h1>
+            </div>
+            <div style="align-items:flex-end;">
+                 <a class="back" onclick="history.back()" onmouseover="RedBack()" onmouseout="GrayBack()">
+                Вернуться назад
+                <img class="back-img" id="back-img" src="~/img/gray_back.svg" />
+            </a>
+            </div>
+            
+        </div>
+        <div class="order-detail">
+
+            <div class="detail-item">
+
+                <div class="detail-item-header">
+                    <h2>Информация о заказе:</h2>
+                </div>
+
+                <div class="detail-info">
+
+                    <div class="detail-info-item">
+                        
+                        <div class="detail-block">
+                            <p class="detail-info-header">Статус заказа:</p>
+                        </div>
+                         <div class="detail-block">
+                            <p class="detail-info-value">@Model.Order.Status</p>
+                        </div>
+                    </div>
+
+                    <div class="detail-info-item">
+                        
+                         <div class="detail-block">
+                            <p class="detail-info-header">Способ оплаты:</p>
+                        </div>
+                        <div class="detail-block">
+                            <p class="detail-info-value">@if (Model.Order.PaymentMethod == "card") {<text>Картой через терминал</text>} else {<text>Наличными</text>}</p>
+                        </div>
+                    </div>
+
+                    <div class="detail-info-item">
+
+                        <div class="detail-block">
+                            <p class="detail-info-header">Создан:</p>
+                        </div>
+                        <div class="detail-block">
+                            <p class="detail-info-value">@Model.Order.OrderDate.ToString("dd MMM HH:mm")</p>
+                        </div>
+                    </div>
+                      
+                </div>
+
+            </div>
+
+            <div class="detail-item">
+
+                <div class="detail-item-header">
+                    <h2>Информация о доставке:</h2>
+                </div>
+
+                  <div class="detail-info">
+
+                    <div class="detail-info-item">
+                        
+                        <div class="detail-block">
+                            <p class="detail-info-header">Адрес:</p>
+                        </div>
+                        <div class="detail-block">
+                            <p class="detail-info-value">@Model.Order.Street д @Model.Order.House п @Model.Order.Entrance э @Model.Order.Flour кв @Model.Order.Flat</p>
+                        </div>
+                        
+                    </div>
+
+                    <div class="detail-info-item">
+
+                        <div class="detail-block">
+                            <p class="detail-info-header">Комментарий:</p>
+                        </div>
+                        <div class="detail-block">
+                                <p class="detail-info-value">@Model.Order.Comment</p>
+                        </div>
+
+                    </div>
+                    
+                    <div class="detail-info-item">
+
+                        <div class="detail-block">
+                            <p class="detail-info-header">Время доставки:</p>
+                        </div>
+                        <div class="detail-block">
+                            <p class="detail-info-value">@Model.Order.DeliveryDate.ToString("dd MMM HH:mm")</p>
+                        </div>
+
+                    </div>  
+                                                     
+                </div>
+                
+            </div>
+
+            <div class="detail-item">
+
+                <div class="detail-item-header">
+                    <h2>Покупатель:</h2>
+                </div>
+
+                <div class="detail-info">
+                    <div class="detail-info-item">
+                        <p class="detail-info-value">@Model?.User?.FName @Model?.User?.UserSurname</p>
+                    </div>
+                    <div class="detail-info-user">
+                        <img class="detail-icon" src="~/img/phone.svg" />
+                        <p class="detail-info-value">@Model?.Order.Phone</p>
+                    </div>
+                    <div class="detail-info-user">
+                        <img class="detail-icon" src="~/img/email.svg" />
+                        <p class="detail-info-value">@Model?.User?.Email</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="order-description">
+            <div class="order-shopcart">
+                <div class="detail-item-header">
+                    <div class="shopcart-long-block">
+                        <h2>Товары(@Model!.Products!.Count)</h2>
+                    </div>
+                    <div class="shopcart-short-block">
+                        <p class="shopcart-header">Количество</p>
+                    </div>
+                    <div class="shopcart-short-block">
+                        <p class="shopcart-header">Сумма</p>
+                    </div>
+                </div>
+                <div class="detail-info">
+                    @{
+                        foreach (var item in Model!.Products!)
+                        {
+                            <div class="order-shopcart-item">
+
+                                <div class="shopcart-long-block">
+                                    <div class="oder-product">
+                                        <div class="oder-product-image">
+                                            <img src="@item.Key!.MainUrl" />
+                                        </div>
+                                        <div class="oder-product-info">
+                                            <p>@item.Key!.Name</p>
+                                            <p>@(item.Key?.Weight == 0 ? @Math.Round(item.Key.Price, 2) : Math.Round((decimal)item.Key!.Weight * item.Key.Price, 2))р.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="shopcart-short-block oder-product-info">
+                                    <p class="shopcart-header">@item.Value</p>
+                                </div>
+                                <div class="shopcart-short-block oder-product-info weight">
+                                    <p class="shopcart-header">@(item.Key?.Weight == 0 ? @Math.Round(item.Key.Price, 2) * item.Value : Math.Round((decimal)item.Key!.Weight * item.Key.Price, 2) * item.Value)р.</p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+          
+            <div class="detail-item">
+                <div class="detail-item-header">
+                    <h2>Сумма заказа</h2>
+                </div>
+
+                 <div class="detail-info-item">
+
+                        <div class="detail-block">
+                            <p class="detail-info-header">Товары(@Model.Products.Sum(x=>x.Value)):</p>
+                        </div>
+                        <div class="detail-block">
+                        <p class="detail-info-value">@(Model.Total)р.</p>
+                        </div>
+
+                 </div>
+
+                <div class="detail-info-item">
+
+                    <div class="detail-block">
+                        <p class="detail-info-header">Доставка:</p>
+                    </div>
+                    <div class="detail-block">
+                        <p class="detail-info-value">9.00р.</p>
+                    </div>
+
+                </div>
+                <div class="detail-info-item">
+
+                    <div class="detail-block">
+                        <p class="detail-info-header">Потрачено баллов:</p>
+                    </div>
+                    <div class="detail-block">
+                        <p class="detail-info-value">@Model.Order.SpentPoints</p>
+                    </div>
+
+                </div>
+                <div class="detail-info-item">
+
+                    <div class="detail-block">
+                        <p class="detail-info-header">Получено баллов:</p>
+                    </div>
+                    <div class="detail-block">
+                        <p class="detail-info-value">@Model.Order.AccruedPoints</p>
+                    </div>
+
+                </div>
+                <div class="detail-info-item total">
+
+                    <div class="detail-block">
+                        <p class="detail-info-header">Всего:</p>
+                    </div>
+                    <div class="detail-block">
+                        <p class="total-price">@(Model.Order.Price)р.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

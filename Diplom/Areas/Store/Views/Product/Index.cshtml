@@ -1,0 +1,94 @@
+﻿@model Diplom.Areas.Store.Models.ViewModels.ProductsVM;
+@{
+    ViewData["Title"] = "Товары";
+}
+<div class="main">
+    <div class="menu">
+        <div class="left-menu">
+            <h1>Каталог</h1>
+            <ul class="nav-category">
+                @foreach (var category in Model.Categories!)
+                {
+                    <li>
+                        <a asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.Id"><span>|</span><img src="@category.SideUrl" />@category.Name</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="container">
+            <div class="category-header">
+                <a class="category-back" asp-action="Catalog" asp-controller="Home" onmouseover="RedBack()" onmouseout="GrayBack()">
+                    Вернуться на главную
+                    <img class="back-img" id="back-img" src="~/img/gray_back.svg" />
+                </a>
+                <h1>
+                    @Model?.CurrentCategory?.Name
+                </h1>
+                @if (Model?.CurrentCategory != null)
+                {
+                    <a class="sort" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <img class="sort-img" src="~/img/sort-gray.svg" id="sort-img" onmouseover="RedSort()" onmouseout="GraySort()" />
+                    </a>
+               
+                    <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="modal-title" id="exampleModalLabel">Сортировка</h2>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form  method="post" id="sort-form" asp-controller="Product" asp-action="Sort" asp-route-categoryId="@Model?.CurrentCategory?.Id">
+                                        <div class="sort-method-item">
+                                            <input type="radio" name="sort" value="up" />
+                                            <label>Сначала дешевле</label>
+                                        </div>
+                                        <div class="sort-method-item">
+                                            <input type="radio" name="sort" value="down" />
+                                            <label>Сначала дороже</label>
+                                        </div>
+                                        <div class="sort-method-item">
+                                            <input type="radio" name="sort" value="default" checked />
+                                            <label>По умолчанию</label>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" id="save" class="save-sort" form="sort-form">Применить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+
+            </div>
+            <div class="row">
+                @{if(Model?.Products?.Count!=0)
+                {
+                    foreach (var tovar in Model?.Products!)
+                    {
+                        for (int i = 0; i < 8; i++)
+                        {
+                            <div class="col-lg-3 product-item">
+                                <a class="category-link" asp-action="Info" asp-controller="Product" asp-route-productId="@tovar.Id">
+                                    <img src="@tovar.MainUrl">
+                                    <strong>@(tovar.Weight == 0 ? @Math.Round(tovar.Price, 2) : Math.Round((decimal)tovar.Weight * tovar.Price, 2))р.</strong>
+                                    <p class="tovar-name">@tovar.Name</p>                          
+                                </a>
+                            </div>
+                            }
+                        }
+                    }
+                else
+                {
+                    <div class="message-error">
+                        <p class="big-p-error">@Model.ErrorMessage</p>
+                    </div>  
+                }}
+
+            </div>
+        </div>
+    </div>
+</div>
+

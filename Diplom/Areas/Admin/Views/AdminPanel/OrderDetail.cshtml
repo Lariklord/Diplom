@@ -1,0 +1,226 @@
+﻿@model Diplom.Areas.Store.Models.ViewModels.OrderDetailVM;
+@{
+	ViewData["Title"] = "Заказ №" + Model?.Order?.Id;
+}
+<style>
+	* {
+		Font-family: Roboto,sans-serif;
+	}
+
+	.header1 {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background-color: #333;
+		color: white;
+		padding: 10px 20px;
+	}
+	.header1 a {
+		color: white;
+		text-decoration: none;
+		margin-left: 20px;
+	}
+
+	.filter-block {
+		display: flex;
+		align-items: center;
+		justify-content: left;
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	table {
+		border-collapse: collapse;
+		margin: 0 auto;
+		width: 100%;
+	}
+
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+	}
+
+	tr:hover {
+		background-color: #ddd;
+	}
+
+	th {
+		background-color: #333;
+		color: white;
+		padding: 10px;
+		text-align: center;
+	}
+
+	td {
+		border: 1px solid #ddd;
+		padding: 10px;
+		text-align: center;
+	}
+
+		td a {
+			color: #F40F31;
+			text-decoration: none;
+			position: relative;
+			display: block;
+		}
+
+			td a:hover {
+				color: black;
+			}
+
+			td a::after {
+				content: '';
+				display: block;
+				position: absolute;
+				bottom: -2px;
+				left: 0;
+				width: 0;
+				height: 2px;
+				background-color: black;
+				transition: width 0.3s ease-in-out;
+			}
+
+			td a:hover::after {
+				width: 100%;
+			}
+
+	.form {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin: 20px;
+	}
+
+	input {
+		padding: 10px;
+		margin: 5px;
+		border: none;
+		border-radius: 5px;
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	}
+
+	select {
+		padding: 10px;
+		margin: 5px;
+		border: none;
+		border-radius: 5px;
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	}
+
+	button {
+		padding: 10px;
+		margin: 5px;	
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+	.accept{
+		background-color: #1abc9c;
+	}
+	.accept:hover{
+		background-color: #148f77;
+	}
+	.cancel{
+		background-color: #F50F0E;
+	}
+	.cancel:hover{
+		background-color: #D80F0E;
+			
+	}
+</style>
+<header class="header1">
+	<h1>Управление заказами</h1>
+	<nav>
+		<a asp-action="Index" asp-controller="AdminPanel">Главная</a>
+		<a asp-action="Products" asp-controller="AdminPanel">Продукты</a>
+		<a asp-action="Orders" asp-controller="AdminPanel">Заказы</a>
+		<a asp-action="Users" asp-controller="AdminPanel">Пользователи</a>
+	</nav>
+</header>
+@if (Model!.Order!.Status == "Ожидает подтверждения")
+{
+	<div class="filter-block">
+		<form class="form" method="post">
+			<button class="accept" asp-route-orderId="@Model!.Order!.Id" asp-action="AcceptOrder" asp-controller="AdminPanel">Принять</button>
+		</form>
+		<form class="form" method="post">
+			<button class="cancel" asp-route-orderId="@Model!.Order!.Id" asp-action="CancelOrder" asp-controller="AdminPanel">Отменить</button>
+		</form>
+	</div>
+}
+
+<table>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Статус</th>
+			<th>ФИО Заказчика</th>
+			<th>Телефон</th>
+			<th>Почта</th>
+			<th>Дата заказа</th>
+			<th>Дата доставки</th>
+			<th>Способ оплаты</th>
+			<th>Адрес</th>
+			<th>Комментарий</th>
+			<th>Заработано баллов</th>
+			<th>Потрачено баллов</th>
+			<th>Стоимость (р.)</th>
+		</tr>
+	</thead>
+	<tbody>
+			<tr>
+				<td>@Model!.Order!.Id</td>
+				<td>@Model!.Order!.Status</td>
+				<td>@Model!.Order!.User.UserSurname @Model!.Order!.User.FName</td>
+				<td>@Model!.Order!.Phone</td>
+				<td>@Model!.Order!.User.Email</td>
+				<td>@Model!.Order!.OrderDate.ToString("dd MMM HH:mm yyyy")</td>
+				<td>@Model!.Order!.DeliveryDate.ToString("dd MMM HH:mm yyyy")</td>
+				<td>@(Model!.Order!.PaymentMethod == "nal" ? "наличные" : "картой")</td>
+				<td>@Model!.Order!.Street д @Model!.Order!.House п @Model!.Order!.Entrance э @Model!.Order!.Flour кв @Model!.Order!.Flat</td>
+				<td>@Model!.Order!.Comment</td>
+				<td>@Model!.Order!.AccruedPoints</td>
+				<td>@Model!.Order!.SpentPoints</td>
+				<td>@Model!.Order!.Price</td>
+			</tr>
+	</tbody>
+</table>
+
+<table>
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Категория</th>
+			<th>Название</th>
+			<th>Артикул</th>
+			<th>Описание</th>
+			<th>Состав</th>
+			<th>Срок годности</th>
+			<th>Цена (р./кг.)</th>
+			<th>Вес (кг.)</th>
+			<th>Количество</th>
+			<th>Стоимость (р.)</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Products!)
+		{
+			<tr>
+				<td>@item.Key.Id</td>
+				<td>@item.Key.Category!.Name</td>
+				<td>@item.Key.Name</td>
+				<td>@item.Key.Code</td>
+				<td>@item.Key.Description</td>
+				<td>@item.Key.Composition</td>
+				<td>@item.Key.ShelfLife</td>
+				<td>@item.Key.Price</td>
+				<td>@item.Key.Weight</td>
+				<td>@item.Value</td>
+				<td>@(item.Key?.Weight == 0 ? @Math.Round(item.Key.Price, 2) * item.Value : Math.Round((decimal)item.Key!.Weight * item.Key.Price, 2) * item.Value)</td>
+			</tr>
+		}
+	</tbody>
+</table>

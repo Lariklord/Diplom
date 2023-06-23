@@ -1,0 +1,39 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Вход";
+}
+<div class="identity">
+    <div class="identity-main">
+            <form id="account" method="post">
+                <h1>Вход в аккаунт</h1>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <fieldset class="form-item">
+                <input asp-for="Input.Email" class="text-input" autocomplete="off" aria-required="true" placeholder="-" maxlength="30" required />
+                    <label asp-for="Input.Email" class="text-input-label"></label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="form-item">
+                <input asp-for="Input.Password" class="text-input" autocomplete="off" aria-required="true" placeholder="-" required />
+                    <label asp-for="Input.Password" class="text-input-label"></label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </fieldset>
+                <div>
+                    <div class="checkbox">
+                        <label asp-for="Input.RememberMe" class="form-label">
+                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                </div>
+                <fieldset class="form-item">
+                    <button id="loginSubmit" type="submit" class="identity-register-button">Войти</button>
+                </fieldset>                                                    
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

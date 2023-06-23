@@ -1,0 +1,87 @@
+﻿@model Diplom.Areas.Store.Models.ViewModels.InfoVM;
+@{
+    ViewData["Title"] = @Model?.Product?.Name;
+}
+<div class="main">
+    <div class="menu">
+        <div class="left-menu">
+            <h1>Каталог</h1>
+            <ul class="nav-category">
+                @foreach (var category in Model!.Categories!)
+                {
+                    <li>
+                        <a asp-controller="Product" asp-action="Index" asp-route-categoryId="@category.Id"><span>|</span><img src="@category.SideUrl" />@category.Name</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="container">
+            <div class="category-header">
+                <a class="category-back" onclick="history.back()" onmouseover="RedBack()" onmouseout="GrayBack()">
+                    Вернуться назад
+                    <img class="back-img" id="back-img" src="~/img/gray_back.svg" />
+                </a>               
+            </div>
+            <div class="main-info">
+                <div class="favourite">
+                    <div class="heart">
+                        @if (Model!.IsFav)
+                        {
+                            <a asp-action="Favourite" asp-controller="Product" asp-route-productId="@Model!.Product!.Id">
+                                <img src="~/img/fav.svg">
+                            </a>                          
+                        }
+                        else
+                        {
+                            <a asp-action="Favourite" asp-controller="Product" asp-route-productId="@Model!.Product!.Id">
+                                <img src="~/img/notfav.svg">
+                            </a>
+                        }
+                    </div>                 
+                </div>
+                <div class="info-img">
+                    <img src="@Model?.Product?.MainUrl" />                  
+                </div>
+                <div class="info-name">
+                    <div>
+                        <h1 class="product-name">@Model?.Product?.Name</h1>
+                    </div>
+                   <div>
+                        <strong class="product-price">@(Model?.Product?.Weight == 0 ? @Math.Round(Model.Product.Price, 2) : Math.Round((decimal)Model!.Product!.Weight * Model.Product.Price, 2))р.</strong>
+                        <a class="product-button" asp-controller="Product" asp-action="DeleteFromCart" asp-route-productId="@Model!.Product!.Id">-</a>
+                        <h1 class="product-count">@Model.AddedCount</h1>
+                        <a class="product-button" asp-action="AddToCart" asp-controller="Product" asp-route-productId="@Model!.Product!.Id">+</a>
+                   </div>
+                </div>
+            </div>
+            <div class="description">
+                <div class="description-item">
+                    <h2>Описание</h2>
+                    <p>@Model.Product.Description</p>
+                </div>
+                @if(Model.Product.Weight!=0)
+                {
+                    <div class="description-item">
+                        <h2>Цена за 1 кг.(л.):</h2>
+                        <p>@(Math.Round(Model.Product.Price, 2)).руб</p>
+                    </div>
+                }
+                @if (Model.Product.Composition != null)
+                {
+                    <div class="description-item">
+                        <h2>Состав</h2>
+                        <p>@Model?.Product.Composition</p>
+                    </div>
+                }       
+                <div class="description-item">
+                    <h2>Срок годности</h2>
+                    <p>@Model?.Product.ShelfLife</p>
+                </div>
+                <div class="description-item">
+                    <h2>Артикул</h2>
+                    <p>@Model?.Product.Code</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

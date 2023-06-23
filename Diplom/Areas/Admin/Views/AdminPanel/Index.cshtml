@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Админ панель";
+}
+<div class="admin-panel">
+    <div id="header">
+        <h1>Админ панель</h1>
+    </div>
+    <div id="main">
+        <div class="card">
+            <h2>Заказы</h2>
+            <p>Просмотр и управление заказами</p>
+            <a class="btn btn-primary w-50 btn-card" asp-action="Orders" asp-controller="AdminPanel">Перейти</a>
+        </div>
+        <div class="card">
+            <h2>Товары</h2>
+            <p>Просмотр и управление товарами</p>
+            <a class="btn btn-primary w-50 btn-card" asp-action="Products" asp-controller="AdminPanel">Перейти</a>
+        </div>
+        <div class="card">
+            <h2>Пользователи</h2>
+            <p>Просмотр и управление пользователями</p>
+            <a class="btn btn-primary w-50 btn-card" asp-action="Users" asp-controller="AdminPanel">Перейти</a>
+        </div>
+    </div>
+</div>

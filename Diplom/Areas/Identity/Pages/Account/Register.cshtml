@@ -1,0 +1,48 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+<div class="identity">
+    <div class="identity-main">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h1>Создание аккаунта</h1>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <fieldset class="form-group">
+                 <fieldset class="form-item">
+                    <input asp-for="Input.Name" class="text-input" autocomplete="off"  aria-required="true" placeholder="-" maxlength="15" required />
+                    <label asp-for="Input.Name" class="text-input-label"></label>
+                    <span asp-validation-for="Input.Name" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="form-item">
+                    <input asp-for="Input.Surname" class="text-input" autocomplete="off" aria-required="true" placeholder="-" maxlength="15" required />
+                    <label asp-for="Input.Surname" class="text-input-label"></label>
+                    <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="form-item">
+                    <input asp-for="Input.Email" class="text-input" autocomplete="off"  aria-required="true" placeholder="-" maxlength="30" required />
+                    <label asp-for="Input.Email" class="text-input-label"></label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="form-item">
+                    <input asp-for="Input.Password" class="text-input" autocomplete="off" aria-required="true" placeholder="-" required maxlength="20" />
+                    <label asp-for="Input.Password" class="text-input-label"></label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </fieldset>
+                <fieldset class="form-item">
+                    <input asp-for="Input.ConfirmPassword" class="text-input" autocomplete="off"  aria-required="true" placeholder="-" required maxlength="20" />
+                    <label asp-for="Input.ConfirmPassword" class="text-input-label"></label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </fieldset>
+                <p class="addition-info">*Мы отправим ссылку для подтверждения аккаунта на почту</p>
+                <fieldset class="form-item">
+                    <button id="registerSubmit" type="submit" class="identity-register-button">Создать аккаунт</button>
+                </fieldset>
+            </fieldset>         
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

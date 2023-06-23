@@ -1,0 +1,22 @@
+﻿@model AuthVm;
+@{
+    ViewData["Title"] = "Авторизация";
+}
+<div class="admin-main">
+	<form class="admin-form" method="post" asp-controller="Auth" asp-action="Index">
+		<h2>Вход для администратора</h2>
+		<label asp-for="Login"></label>
+		<input asp-for="Login" class="admin-input" type="text">
+		<span asp-validation-for="Login" class="text-danger"></span>
+		<br />
+		<label asp-for=Password></label>
+		<input asp-for=Password class="admin-input" type="password">
+		<span asp-validation-for="Password" class="text-danger"></span>
+		@if (ViewBag.Error != null)
+		{
+			<span style="color: red;">@ViewBag.Error</span>
+		}
+		<br />
+		<button class="admin-button" type="submit">Войти</button>
+	</form>
+</div>
